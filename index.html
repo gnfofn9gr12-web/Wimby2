@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطعم ويمبي البساتين | المنيو التفاعلي والطلب أونلاين - الخارجة</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        obsidian: '#0c0a09',
+                        charcoal: '#161311',
+                        ember: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        flame: {
+                            500: '#ef4444',
+                            600: '#dc2626',
+                        }
+                    },
+                    transitionTimingFunction: {
+                        'expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-dark: #0c0a09;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0c0a09;
+            color: #fafaf9;
+            overflow-x: hidden;
+            selection-background-color: #f59e0b;
+            selection-color: #0c0a09;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0c0a09;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #292524;
+            border-radius: 9999px;
+            border: 2px solid #0c0a09;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+
+        /* Hide scrollbar for category pills */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 3D Interactive Menu Card Styling */
+        .menu-card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.45s var(--ease-out-expo), box-shadow 0.45s var(--ease-out-expo), border-color 0.35s var(--ease-out-expo);
+            position: relative;
+            background: linear-gradient(145deg, rgba(28, 25, 23, 0.88) 0%, rgba(16, 14, 13, 0.96) 100%);
+            backdrop-filter: blur(16px);
+        }
+
+        .menu-card-3d::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(
+                500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(245, 158, 11, 0.14),
+                transparent 45%
+            );
+            opacity: 0;
+            transition: opacity 0.4s var(--ease-out-expo);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .menu-card-3d:hover::before {
+            opacity: 1;
+        }
+
+        .menu-card-3d:hover {
+            border-color: rgba(245, 158, 11, 0.45);
+            box-shadow: 0 22px 45px -15px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(245, 158, 11, 0.18);
+        }
+
+        /* Shimmer Text Effect */
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 50%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Staggered Reveal Animation */
+        @keyframes revealUp {
+            0% {
+                opacity: 0;
+                transform: translateY(28px) scale(0.97);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .animate-reveal {
+            animation: revealUp 0.65s var(--ease-out-expo) forwards;
+        }
+
+        /* Pulse Glow */
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px 6px rgba(245, 158, 11, 0.25);
+            }
+        }
+
+        .glow-pulse {
+            animation: pulseGlow 2.8s infinite;
+        }
+
+        /* Cart Bump Animation */
+        @keyframes cartBump {
+            0% { transform: scale(1); }
+            35% { transform: scale(1.22) rotate(-3deg); }
+            70% { transform: scale(0.94) rotate(2deg); }
+            100% { transform: scale(1); }
+        }
+
+        .cart-bump {
+            animation: cartBump 0.45s var(--ease-out-expo);
+        }
+
+        /* Custom Glass Panels */
+        .glass-nav {
+            background: rgba(12, 10, 9, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .magnetic-btn {
+            transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo), background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amber-500 selection:text-stone-950 relative">
+
+    <!-- ==========================================
+         FULL-BLEED HIGH-DPI INTERACTIVE CANVAS
+         (Wood-fired Embers & Culinary Aroma Physics)
+    =========================================== -->
+    <canvas id="emberCanvas" class="fixed inset-0 pointer-events-none z-0 w-full h-full opacity-90"></canvas>
+
+    <!-- ==========================================
+         TOP ANNOUNCEMENT & LOCATION BAR
+    =========================================== -->
+    <div class="relative z-30 bg-gradient-to-l from-amber-600/20 via-red-900/25 to-stone-950 border-b border-amber-500/20 text-xs sm:text-sm py-2 px-4">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-stone-200">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-emerald-400 -mr-2"></span>
+                <span class="font-semibold text-amber-300">مفتوح الآن للطلبات والتوصيل السريع</span>
+                <span class="hidden md:inline text-stone-400">|</span>
+                <span class="hidden md:inline-flex items-center gap-1.5 text-stone-300">
+                    <i class="fa-solid fa-location-dot text-amber-400"></i>
+                    الوادي الجديد - الخارجة - ميدان البساتين
+                </span>
+            </div>
+            <div class="flex items-center gap-3 mr-auto sm:mr-0">
+                <a href="tel:01116056011" class="hover:text-amber-400 transition-colors flex items-center gap-1.5 font-bold" dir="ltr">
+                    <i class="fa-solid fa-phone-volume text-amber-400 text-xs"></i>
+                    01116056011
+                </a>
+                <span class="text-stone-600">/</span>
+                <a href="tel:01280403637" class="hover:text-amber-400 transition-colors flex items-center gap-1.5 font-bold" dir="ltr">
+                    <i class="fa-solid fa-phone-volume text-red-400 text-xs"></i>
+                    01280403637
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         STICKY NAVIGATION HEADER
+    =========================================== -->
+    <header class="sticky top-0 z-30 glass-nav border-b border-stone-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3.5 group focus:outline-none">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 p-0.5 shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-full bg-stone-950 rounded-[14px] flex items-center justify-center relative overflow-hidden">
+                        <i class="fa-solid fa-fire-flame-curved text-2xl text-amber-400 group-hover:rotate-12 transition-transform"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white">
+                            ويمبي <span class="text-amber-400">البساتين</span>
+                        </h1>
+                        <span class="hidden sm:inline-block text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full">
+                            الخارجة
+                        </span>
+                    </div>
+                    <p class="text-xs text-stone-400 font-tajawal">ملوك البيتزا والفطائر والمشويات والطبخ الشرقي</p>
+                </div>
+            </a>
+
+            <!-- Quick Nav Links (Desktop) -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-bold text-stone-300">
+                <a href="#menuSection" class="hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-utensils text-amber-500 text-xs"></i>
+                    قائمة الطعام الكاملة
+                </a>
+                <button onclick="filterByTag('popular')" class="hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
+                    الأكثر طلباً
+                </button>
+                <a href="#contactFooter" class="hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-map-location-dot text-red-400 text-xs"></i>
+                    العنوان والتواصل
+                </a>
+            </nav>
+
+            <!-- Action Controls -->
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <!-- Sound FX Toggle -->
+                <button id="soundToggleBtn" onclick="toggleSoundFx()" title="تفعيل/كتم المؤثرات الصوتية التفاعلية"
+                    class="w-11 h-11 rounded-xl bg-stone-900/90 hover:bg-stone-800 border border-stone-800 text-stone-300 hover:text-amber-400 flex items-center justify-center transition-all">
+                    <i id="soundIcon" class="fa-solid fa-volume-high text-sm"></i>
+                </button>
+
+                <!-- Cart Trigger Button -->
+                <button id="headerCartBtn" onclick="toggleCartDrawer(true)"
+                    class="magnetic-btn relative flex items-center gap-3 bg-gradient-to-l from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-stone-950 font-extrabold px-4 sm:px-5 py-2.5 rounded-xl shadow-lg shadow-amber-500/20">
+                    <div class="relative flex items-center">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <span id="headerCartCount" class=" -top-2 -right-2.5 bg-stone-950 text-amber-400 border border-amber-400/50 text-[11px] font-black min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center ml-1.5">
+                            0
+                        </span>
+                    </div>
+                    <span class="hidden sm:inline text-sm">سلة الطلبات</span>
+                    <span id="headerCartTotal" class="text-xs sm:text-sm bg-stone-950/20 px-2 py-0.5 rounded-lg font-black">
+                        0 ج.م
+                    </span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         CINEMATIC HERO SECTION
+    =========================================== -->
+    <section class="relative z-10 pt-8 pb-12 sm:py-16 lg:py-20 overflow-hidden border-b border-stone-800/60">
+        <!-- Ambient Radial Glows -->
+        <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-10 left-1/4 w-80 h-80 bg-red-600/15 rounded-full blur-[110px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                <!-- Hero Text Column -->
+                <div class="lg:col-span-7 text-right space-y-6">
+                    <div class="inline-flex items-center gap-2.5 bg-stone-900/90 border border-amber-500/30 rounded-full px-4 py-1.5 text-xs sm:text-sm text-amber-300 shadow-inner">
+                        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                        <span>الوادي الجديد • الخارجة • ميدان البساتين</span>
+                        <span class="text-stone-600">|</span>
+                        <span class="text-red-400 font-bold">طعم لا يُقاوم</span>
+                    </div>
+
+                    <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.2] tracking-tight text-white">
+                        أشهى المأكولات من فرن وشواية
+                        <span class="text-gradient-gold block mt-1">مطعم ويمبي البساتين</span>
+                    </h2>
+
+                    <p class="text-stone-300 font-tajawal text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl">
+                        تصفح المنيو التفاعلي الكامل لـ <strong class="text-amber-400">94 صنفاً</strong> من البيتزا الإيطالية، الفطائر الشرقية، المشويات على الفحم، الكريب، الباستا، وطواجن الطبخ البلدي الأصيل. اختر أحجامك المفضلة واطلب مباشرة بضغطة زر!
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap items-center gap-3.5 pt-2">
+                        <a href="#menuSection"
+                            class="magnetic-btn inline-flex items-center gap-3 bg-gradient-to-l from-amber-500 via-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-stone-950 font-black px-7 py-4 rounded-2xl shadow-xl shadow-amber-500/25 text-base">
+                            <i class="fa-solid fa-fire text-lg"></i>
+                            <span>ابدأ طلبك الآن</span>
+                            <i class="fa-solid fa-arrow-down text-sm"></i>
+                        </a>
+
+                        <button onclick="openQuickContactModal()"
+                            class="magnetic-btn inline-flex items-center gap-2.5 bg-stone-900/90 hover:bg-stone-800 text-stone-100 border border-stone-700/80 hover:border-amber-500/50 font-bold px-6 py-4 rounded-2xl text-base transition-all">
+                            <i class="fa-solid fa-phone-flip text-amber-400"></i>
+                            <span>اتصال مباشر للتوصيل</span>
+                        </button>
+                    </div>
+
+                    <!-- Quick Highlights Stats -->
+                    <div class="grid grid-cols-3 gap-3 sm:gap-4 pt-4 max-w-xl">
+                        <div class="bg-stone-900/70 border border-stone-800/90 rounded-2xl p-3.5 backdrop-blur-md">
+                            <div class="text-amber-400 font-black text-xl sm:text-2xl">8 أركان</div>
+                            <div class="text-stone-400 text-xs sm:text-sm font-tajawal">تشكيلة شاملة لكل الأذواق</div>
+                        </div>
+                        <div class="bg-stone-900/70 border border-stone-800/90 rounded-2xl p-3.5 backdrop-blur-md">
+                            <div class="text-emerald-400 font-black text-xl sm:text-2xl">+94 صنف</div>
+                            <div class="text-stone-400 text-xs sm:text-sm font-tajawal">طازج يومياً بأفضل الأسعار</div>
+                        </div>
+                        <div class="bg-stone-900/70 border border-stone-800/90 rounded-2xl p-3.5 backdrop-blur-md">
+                            <div class="text-red-400 font-black text-xl sm:text-2xl">توصيل سريع</div>
+                            <div class="text-stone-400 text-xs sm:text-sm font-tajawal">ميدان البساتين وكل الخارجة</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Interactive Showcase Card -->
+                <div class="lg:col-span-5">
+                    <div id="heroShowcaseCard" class="menu-card-3d rounded-3xl border border-amber-500/30 p-6 sm:p-7 shadow-2xl relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-red-500/20 text-red-300 border border-red-500/30 text-xs font-extrabold px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="fa-solid fa-fire-flame-simple"></i>
+                                ترشيح الشيف اليوم
+                            </span>
+                            <span class="text-xs text-stone-400 font-tajawal">حرّك المؤشر لتجربة الإضاءة ثلاثية الأبعاد</span>
+                        </div>
+
+                        <!-- Custom SVG Culinary Illustration -->
+                        <div class="relative h-48 sm:h-56 rounded-2xl bg-gradient-to-b from-stone-900/90 to-stone-950 border border-stone-800/80 flex items-center justify-center overflow-hidden mb-5 group">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.22),transparent_70%)]"></div>
+                            <svg class="w-40 h-40 sm:w-44 sm:h-44 transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 ease-expo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Glowing Aura -->
+                                <circle cx="100" cy="100" r="82" fill="url(#pizzaGlow)" opacity="0.35"/>
+                                <!-- Pizza Crust -->
+                                <circle cx="100" cy="100" r="74" fill="#D97706" stroke="#F59E0B" stroke-width="4"/>
+                                <!-- Melted Cheese -->
+                                <circle cx="100" cy="100" r="63" fill="#FBBF24"/>
+                                <!-- Tomato Sauce Rim -->
+                                <circle cx="100" cy="100" r="64" stroke="#DC2626" stroke-width="3" stroke-dasharray="12 6"/>
+                                <!-- Slice Lines -->
+                                <line x1="100" y1="26" x2="100" y2="174" stroke="#B45309" stroke-width="2" opacity="0.5"/>
+                                <line x1="26" y1="100" x2="174" y2="100" stroke="#B45309" stroke-width="2" opacity="0.5"/>
+                                <line x1="48" y1="48" x2="152" y2="152" stroke="#B45309" stroke-width="2" opacity="0.5"/>
+                                <line x1="152" y1="48" x2="48" y2="152" stroke="#B45309" stroke-width="2" opacity="0.5"/>
+                                <!-- Toppings: Pepperoni / Pastrami / Shrimp / Olives / Peppers -->
+                                <circle cx="75" cy="70" r="10" fill="#DC2626"/>
+                                <circle cx="128" cy="72" r="9" fill="#DC2626"/>
+                                <circle cx="68" cy="122" r="9" fill="#DC2626"/>
+                                <circle cx="125" cy="126" r="10" fill="#DC2626"/>
+                                <circle cx="100" cy="95" r="8" fill="#991B1B"/>
+                                <!-- Green Peppers & Herbs -->
+                                <path d="M85 52 Q95 45 105 54" stroke="#16A34A" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M135 98 Q145 105 138 115" stroke="#16A34A" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M55 95 Q48 105 58 112" stroke="#16A34A" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M90 145 Q102 152 112 142" stroke="#16A34A" stroke-width="4" stroke-linecap="round"/>
+                                <!-- Black Olives -->
+                                <circle cx="108" cy="68" r="4" fill="#1C1917" stroke="#FAFAF9" stroke-width="1"/>
+                                <circle cx="78" cy="98" r="4" fill="#1C1917" stroke="#FAFAF9" stroke-width="1"/>
+                                <circle cx="118" cy="102" r="4" fill="#1C1917" stroke="#FAFAF9" stroke-width="1"/>
+                                <circle cx="94" cy="128" r="4" fill="#1C1917" stroke="#FAFAF9" stroke-width="1"/>
+                                <defs>
+                                    <radialGradient id="pizzaGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(100 100) rotate(90) scale(85)">
+                                        <stop stop-color="#F59E0B"/>
+                                        <stop offset="1" stop-color="#F59E0B" stop-opacity="0"/>
+                                    </radialGradient>
+                                </defs>
+                            </svg>
+                            <div class="absolute bottom-3 right-3 bg-stone-950/90 border border-amber-500/40 px-3 py-1 rounded-xl text-xs font-bold text-amber-300">
+                                وسط 50 ج • كبير 60 ج • عائلي 70 ج
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="flex items-start justify-between gap-2">
+                                <div>
+                                    <h3 class="text-xl font-black text-white">بيتزا وفطيرة ويمبي المخصوص</h3>
+                                    <p class="text-xs sm:text-sm text-stone-400 font-tajawal mt-0.5">
+                                        خلطة ويمبي السرية الغنية بالجبن الموتزاريلا والحشوات الفاخرة
+                                    </p>
+                                </div>
+                                <span class="bg-amber-500/20 text-amber-300 font-black px-3 py-1 rounded-xl text-sm shrink-0">
+                                    الأكثر مبيعاً
+                                </span>
+                            </div>
+
+                            <div class="pt-2 grid grid-cols-2 gap-2.5">
+                                <button onclick="quickAddFeatured('pizza-3', 'وسط', 50)"
+                                    class="w-full py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 shadow-md">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>بيتزا ويمبي (وسط - 50 ج)</span>
+                                </button>
+                                <button onclick="quickAddFeatured('pies-1', 'وسط', 50)"
+                                    class="w-full py-2.5 px-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-amber-300 border border-amber-500/30 font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>فطيرة ويمبي (وسط - 50 ج)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         INTERACTIVE MENU CONTROLS & SEARCH BAR
+    =========================================== -->
+    <main id="menuSection" class="relative z-10 flex-grow py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Section Title & Search/Sort Row -->
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+                <div>
+                    <span class="text-amber-400 font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i>
+                        منيو مطعم ويمبي البساتين الرسمي
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black text-white mt-1">
+                        اختر ركنك المفضل واطلب الآن
+                    </h2>
+                </div>
+
+                <!-- Search & Sort Controls -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+                    <!-- Instant Search Input -->
+                    <div class="relative flex-grow sm:w-72">
+                        <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm pointer-events-none"></i>
+                        <input id="searchInput" type="text" placeholder="ابحث عن بيتزا، كريب، شويات، كبدة..."
+                            oninput="handleSearchAndFilter()"
+                            class="w-full bg-stone-900/90 border border-stone-800 focus:border-amber-500 rounded-2xl pr-10 pl-9 py-3 text-sm text-white placeholder-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all">
+                        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-white">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Price Sort Select -->
+                    <div class="relative">
+                        <select id="sortSelect" onchange="handleSearchAndFilter()"
+                            class="w-full sm:w-auto appearance-none bg-stone-900/90 border border-stone-800 focus:border-amber-500 rounded-2xl pr-4 pl-10 py-3 text-sm text-stone-200 font-bold focus:outline-none cursor-pointer">
+                            <option value="default">الترتيب: الافتراضي للمنيو</option>
+                            <option value="price-asc">السعر: من الأقل للأعلى</option>
+                            <option value="price-desc">السعر: من الأعلى للأقل</option>
+                        </select>
+                        <i class="fa-solid fa-arrow-down-short-wide absolute left-3.5 top-1/2 -translate-y-1/2 text-amber-400 text-xs pointer-events-none"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sticky Category Tabs Bar -->
+            <div class="sticky top-20 z-20 py-3 -mx-4 px-4 sm:mx-0 sm:px-0 glass-nav rounded-2xl border border-stone-800/80 mb-8 shadow-xl">
+                <div id="categoryTabsContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar px-2">
+                    <!-- Dynamically populated by JS -->
+                </div>
+            </div>
+
+            <!-- Active Filter Info Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-6 px-1 text-xs sm:text-sm text-stone-400">
+                <div id="resultsCountText" class="font-tajawal">
+                    عرض جميع الأصناف المتاحة
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 text-amber-400">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>جميع الأسعار بالجنيه المصري (ج.م)</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Dynamic Menu Grid Container -->
+            <div id="menuContainer" class="space-y-12">
+                <!-- Populated dynamically with all 8 sections & 94 items -->
+            </div>
+
+            <!-- Empty Search State -->
+            <div id="emptyState" class="hidden text-center py-16 px-4 bg-stone-900/50 border border-stone-800 rounded-3xl my-6">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h3 class="text-xl font-black text-white mb-2">لا توجد أصناف مطابقة لبحثك</h3>
+                <p class="text-stone-400 text-sm font-tajawal mb-6">جرّب البحث بكلمة أخرى أو استعرض جميع أقسام المنيو</p>
+                <button onclick="resetAllFilters()" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-black px-6 py-2.5 rounded-xl text-sm transition-all">
+                    عرض المنيو بالكامل
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ==========================================
+         RESTAURANT INFO & FOOTER
+    =========================================== -->
+    <footer id="contactFooter" class="relative z-10 bg-stone-950 border-t border-stone-800/80 pt-14 pb-28 sm:pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-stone-800/80">
+                <!-- Col 1: Brand -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-stone-950 text-xl font-black">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-white">مطعم ويمبي البساتين</h3>
+                            <p class="text-xs text-amber-400">الوادي الجديد - الخارجة</p>
+                        </div>
+                    </div>
+                    <p class="text-stone-400 text-sm font-tajawal leading-relaxed">
+                        وجهتك الأولى في الخارجة وميدان البساتين لأشهى البيتزا، الفطائر الشرقية الحلو والحادق، المشويات على الفحم، الكريب، الباستا، والوجبات المطبوخة الطازجة يومياً.
+                    </p>
+                </div>
+
+                <!-- Col 2: Location & Hours -->
+                <div class="space-y-3">
+                    <h4 class="text-base font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-amber-400"></i>
+                        العنوان ومواعيد العمل
+                    </h4>
+                    <div class="bg-stone-900/80 border border-stone-800 rounded-2xl p-4 space-y-2.5 text-sm">
+                        <div class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-map-pin text-red-400 mt-1"></i>
+                            <div>
+                                <div class="font-bold text-stone-200">الوادي الجديد - الخارجة - ميدان البساتين</div>
+                                <div class="text-xs text-stone-400 font-tajawal">خدمة الصالة، التيك أواي، والتوصيل السريع للمنازل</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5 pt-1 border-t border-stone-800/80 text-stone-300">
+                            <i class="fa-regular fa-clock text-amber-400"></i>
+                            <span class="text-xs font-tajawal">متاح يومياً لتلقي طلباتكم الساخنة طوال اليوم</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 3: Direct Contact Numbers -->
+                <div class="space-y-3">
+                    <h4 class="text-base font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-headset text-amber-400"></i>
+                        أرقام الطلبات والتوصيل
+                    </h4>
+                    <div class="grid grid-cols-1 gap-2.5">
+                        <a href="tel:01116056011" class="flex items-center justify-between bg-stone-900 hover:bg-stone-800 border border-stone-800 hover:border-amber-500/40 rounded-2xl p-3.5 transition-all group">
+                            <div class="flex items-center gap-3">
+                                <span class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-phone"></i>
+                                </span>
+                                <div>
+                                    <div class="text-xs text-stone-400">الخط الأول للطلبات</div>
+                                    <div class="text-base font-black text-white tracking-wider" dir="ltr">01116056011</div>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-lg">اتصل الآن</span>
+                        </a>
+
+                        <a href="tel:01280403637" class="flex items-center justify-between bg-stone-900 hover:bg-stone-800 border border-stone-800 hover:border-amber-500/40 rounded-2xl p-3.5 transition-all group">
+                            <div class="flex items-center gap-3">
+                                <span class="w-9 h-9 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-phone"></i>
+                                </span>
+                                <div>
+                                    <div class="text-xs text-stone-400">الخط الثاني للطلبات</div>
+                                    <div class="text-base font-black text-white tracking-wider" dir="ltr">01280403637</div>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-red-400 bg-red-500/10 px-2.5 py-1 rounded-lg">اتصل الآن</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+                <p>© جميع الحقوق محفوظة لـ <span class="text-stone-300 font-bold">مطعم ويمبي البساتين - الخارجة</span></p>
+                <div class="flex items-center gap-4">
+                    <button onclick="openReceiptPreviewModal()" class="hover:text-amber-400 transition-colors flex items-center gap-1">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>معاينة الفاتورة الرقمية</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         FLOATING BOTTOM CART BAR (MOBILE & DESKTOP)
+    =========================================== -->
+    <div id="floatingCartBar" class="fixed bottom-4 inset-x-4 z-30 max-w-xl mx-auto transform translate-y-32 opacity-0 pointer-events-none transition-all duration-500 ease-expo">
+        <div onclick="toggleCartDrawer(true)"
+            class="cursor-pointer bg-gradient-to-l from-amber-500 via-amber-500 to-orange-600 text-stone-950 rounded-2xl p-3.5 sm:p-4 shadow-2xl shadow-black/80 border border-amber-300/50 flex items-center justify-between gap-4 hover:scale-[1.01] transition-transform">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-stone-950 text-amber-400 flex items-center justify-center font-black text-base relative">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="floatingCartCount" class="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </div>
+                <div>
+                    <div class="font-black text-sm sm:text-base leading-tight">عرض سلة الطلبات وإتمام الطلب</div>
+                    <div id="floatingCartSummary" class="text-xs font-bold text-stone-900/80 font-tajawal">اضغط لمراجعة الأصناف أو الإرسال عبر واتساب</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5 shrink-0">
+                <div class="text-left">
+                    <div class="text-[11px] font-bold text-stone-900/80">الإجمالي</div>
+                    <div id="floatingCartTotal" class="text-base sm:text-lg font-black">0 ج.م</div>
+                </div>
+                <div class="w-8 h-8 rounded-lg bg-stone-950/15 flex items-center justify-center">
+                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE-OVER CART & CHECKOUT DRAWER
+    =========================================== -->
+    <div id="cartDrawerBackdrop" onclick="toggleCartDrawer(false)"
+        class="fixed inset-0 bg-black/75 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <aside id="cartDrawer"
+        class="fixed top-0 left-0 bottom-0 w-full max-w-md bg-stone-950 border-r border-stone-800 z-50 flex flex-col transform -translate-x-full transition-transform duration-500 ease-expo shadow-2xl">
+
+        <!-- Drawer Header -->
+        <div class="p-4 sm:p-5 border-b border-stone-800 flex items-center justify-between bg-stone-900/60">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-white">سلة طلبات ويمبي</h3>
+                    <p id="drawerItemCountSubtitle" class="text-xs text-stone-400 font-tajawal">لا توجد أصناف مضافة بعد</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="clearCartBtn" onclick="clearCart()" title="إفراغ السلة"
+                    class="hidden text-xs font-bold text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-2.5 py-1.5 rounded-lg transition-colors">
+                    <i class="fa-solid fa-trash-can ml-1"></i>إفراغ
+                </button>
+                <button onclick="toggleCartDrawer(false)"
+                    class="w-9 h-9 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Drawer Scrollable Body -->
+        <div class="flex-grow overflow-y-auto p-4 sm:p-5 space-y-6">
+            <!-- Cart Items List -->
+            <div id="cartItemsContainer" class="space-y-3">
+                <!-- Populated dynamically -->
+            </div>
+
+            <!-- Customer & Delivery Details Form -->
+            <div id="checkoutFormSection" class="hidden space-y-4 pt-4 border-t border-stone-800">
+                <h4 class="text-sm font-black text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-Clipboard-list"></i>
+                    بيانات استلام أو توصيل الطلب
+                </h4>
+
+                <!-- Order Type Segmented Toggle -->
+                <div class="grid grid-cols-2 gap-2 bg-stone-900 p-1.5 rounded-xl border border-stone-800">
+                    <button type="button" id="orderTypeDelivery" onclick="setOrderType('توصيل للمنزل')"
+                        class="py-2 px-3 rounded-lg text-xs font-extrabold transition-all bg-amber-500 text-stone-950 shadow">
+                        <i class="fa-solid fa-motorcycle ml-1"></i>توصيل للمنزل
+                    </button>
+                    <button type="button" id="orderTypePickup" onclick="setOrderType('استلام من المطعم')"
+                        class="py-2 px-3 rounded-lg text-xs font-extrabold transition-all text-stone-300 hover:text-white">
+                        <i class="fa-solid fa-store ml-1"></i>استلام من المطعم
+                    </button>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-stone-300 mb-1">الاسم الكريم</label>
+                        <input id="custName" type="text" placeholder="مثال: أحمد محمد"
+                            class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-stone-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-stone-300 mb-1">رقم الموبايل للتواصل</label>
+                        <input id="custPhone" type="tel" dir="ltr" placeholder="01xxxxxxxxx"
+                            class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-stone-500 focus:outline-none text-right">
+                    </div>
+
+                    <div id="addressFieldWrapper">
+                        <label class="block text-xs font-bold text-stone-300 mb-1">العنوان بالتفصيل في الخارجة</label>
+                        <input id="custAddress" type="text" value="الخارجة - ميدان البساتين - "
+                            placeholder="الحي / الشارع / علامة مميزة"
+                            class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-stone-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-stone-300 mb-1">ملاحظات إضافية للشيف (اختياري)</label>
+                        <textarea id="custNotes" rows="2" placeholder="مثال: بدون شطة، زيادة كاتشب، تسوية زيادة..."
+                            class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500 rounded-xl px-3.5 py-2 text-sm text-white placeholder-stone-500 focus:outline-none resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drawer Footer: Totals & Dispatch Actions -->
+        <div id="cartFooterActions" class="hidden p-4 sm:p-5 border-t border-stone-800 bg-stone-900/90 space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-stone-300">إجمالي قيمة الأصناف:</span>
+                <span id="drawerTotalPrice" class="text-2xl font-black text-amber-400">0 ج.م</span>
+            </div>
+
+            <!-- Primary WhatsApp Dispatch Buttons -->
+            <div class="grid grid-cols-1 gap-2">
+                <button onclick="sendOrderWhatsApp('201116056011')"
+                    class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>إرسال الطلب واتساب (01116056011)</span>
+                </button>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="sendOrderWhatsApp('201280403637')"
+                        class="py-2.5 px-3 rounded-xl bg-emerald-900/60 hover:bg-emerald-800/80 border border-emerald-500/30 text-emerald-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <span>واتساب 2 (01280403637)</span>
+                    </button>
+
+                    <button onclick="openReceiptPreviewModal()"
+                        class="py-2.5 px-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-file-invoice"></i>
+                        <span>إصدار فاتورة صورة</span>
+                    </button>
+                </div>
+
+                <button onclick="copyOrderTextToClipboard()"
+                    class="w-full py-2 px-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all">
+                    <i class="fa-regular fa-copy"></i>
+                    <span>نسخ تفاصيل الطلب كنص</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==========================================
+         HIGH-DPI CANVAS DIGITAL RECEIPT MODAL
+    =========================================== -->
+    <div id="receiptModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-stone-900 border border-stone-700 rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl my-auto">
+            <div class="flex items-center justify-between border-b border-stone-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-amber-400 text-lg"></i>
+                    <h3 class="font-black text-white text-base">الفاتورة الرقمية - مطعم ويمبي البساتين</h3>
+                </div>
+                <button onclick="closeReceiptPreviewModal()" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="bg-stone-950 rounded-2xl p-3 border border-stone-800 flex justify-center overflow-hidden">
+                <canvas id="receiptCanvas" class="w-full h-auto rounded-xl shadow-lg max-h-[60vh] object-contain"></canvas>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+                <button onclick="downloadReceiptImage()"
+                    class="py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all">
+                    <i class="fa-solid fa-download"></i>
+                    <span>تحميل صورة الفاتورة</span>
+                </button>
+                <button onclick="copyOrderTextToClipboard()"
+                    class="py-3 px-4 rounded-xl bg-stone-800 hover:bg-stone-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all">
+                    <i class="fa-regular fa-copy"></i>
+                    <span>نسخ نص الفاتورة</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         QUICK PHONE CALL MODAL
+    =========================================== -->
+    <div id="quickContactModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="bg-stone-900 border border-stone-700 rounded-3xl max-w-sm w-full p-6 space-y-5 shadow-2xl text-center">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mx-auto">
+                <i class="fa-solid fa-phone-volume"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-black text-white">اتصل بمطعم ويمبي البساتين</h3>
+                <p class="text-xs text-stone-400 font-tajawal mt-1">الوادي الجديد - الخارجة - ميدان البساتين</p>
+            </div>
+            <div class="space-y-2.5">
+                <a href="tel:01116056011" class="flex items-center justify-between bg-amber-500 hover:bg-amber-400 text-stone-950 font-black p-4 rounded-2xl transition-all">
+                    <span>الخط الأول</span>
+                    <span dir="ltr" class="text-base">01116056011</span>
+                </a>
+                <a href="tel:01280403637" class="flex items-center justify-between bg-stone-800 hover:bg-stone-700 text-white border border-stone-700 font-black p-4 rounded-2xl transition-all">
+                    <span>الخط الثاني</span>
+                    <span dir="ltr" class="text-base">01280403637</span>
+                </a>
+            </div>
+            <button onclick="closeQuickContactModal()" class="w-full py-2.5 rounded-xl bg-stone-950 text-stone-400 hover:text-white text-xs font-bold">
+                إغلاق
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         TOAST NOTIFICATION CONTAINER
+    =========================================== -->
+    <div id="toastContainer" class="fixed top-24 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-sm px-4"></div>
+
+    <!-- ==========================================
+         APPLICATION ARCHITECTURE & LOGIC
+    =========================================== -->
+    <script>
+        /* ============================================================================
+           1. COMPLETE VERIFIED MENU DATASET (ALL 8 SECTIONS & EXACT EGP PRICES)
+           ============================================================================ */
+        const CATEGORIES = [
+            { id: 'all', name: 'كل المنيو', icon: 'fa-border-all', badge: '94' },
+            { id: 'pizza', name: 'ركن البيتزا', icon: 'fa-pizza-slice', subtitle: 'عجينة إيطالية طازجة بـ 3 أحجام (وسط • كبير • عائلي)' },
+            { id: 'pies', name: 'ركن الفطائر', icon: 'fa-stroopwafel', subtitle: 'فطائر شرقية مورقة حادق وحلو (وسط • كبير • عائلي)' },
+            { id: 'grills', name: 'ركن الشويات', icon: 'fa-fire-burner', subtitle: 'مشويات على الفحم البلدي الأصيل بتتبيلة ويمبي' },
+            { id: 'cooking', name: 'ركن الطبخ', icon: 'fa-bowl-rice', subtitle: 'وجبات مطبوخة طازجة (شامل خضار وأرز أو سلطات فقط)' },
+            { id: 'crepe', name: 'ركن الكريب', icon: 'fa-bacon', subtitle: 'كريب مقرمش غني بالحشوات والجبن والصوصات' },
+            { id: 'pasta', name: 'ركن الباستا', icon: 'fa-bowl-food', subtitle: 'مكرونة وباستا غنية بالصوص والبشاميل والجبن' },
+            { id: 'orders', name: 'ركن الطلبات', icon: 'fa-plate-wheat', subtitle: 'طلبات خاصة (مخ، كبدة بلدي، بوفتيك، محاشي، ممبار)' },
+            { id: 'sandwiches', name: 'ركن السندوتشات', icon: 'fa-burger', subtitle: 'سندوتشات وحواوشي ساخن وسريع' }
+        ];
+
+        const MENU_ITEMS = [
+            // ----------------------------------------------------
+            // 1. ركن البيتزا (وسط | كبير | عائلي)
+            // ----------------------------------------------------
+            { id: 'pizza-1', category: 'pizza', name: 'بيتزا جمبري', desc: 'جمبري طازج متبل مع صوص البيتزا الإيطالي، فلفل ألوان، زيتون وموتزاريلا', badge: 'بحري فاخر', popular: true, variants: [{ label: 'وسط', price: 50 }, { label: 'كبير', price: 60 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pizza-2', category: 'pizza', name: 'بيتزا سي فود', desc: 'تشكيلة فواكه البحر الغنية بالجمبري والكاليماري مع جبنة موتزاريلا ذائبة', badge: 'الأكثر طلباً', popular: true, variants: [{ label: 'وسط', price: 50 }, { label: 'كبير', price: 60 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pizza-3', category: 'pizza', name: 'بيتزا ويمبي', desc: 'الخلطة الملكية الخاصة بمطعم ويمبي البساتين مع ميكس اللحوم والجبن', badge: 'مخصوص ويمبي', popular: true, variants: [{ label: 'وسط', price: 50 }, { label: 'كبير', price: 60 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pizza-4', category: 'pizza', name: 'بيتزا اسبشيل', desc: 'توليفة خاصة من الحشوات المميزة مع طبقة مضاعفة من الجبن والزيتون', badge: 'مميز', variants: [{ label: 'وسط', price: 45 }, { label: 'كبير', price: 60 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pizza-5', category: 'pizza', name: 'بيتزا بسطرمة', desc: 'شرائح البسطرمة البلدي مع الموتزاريلا، الفلفل الأخضر، الطماطم والزيتون', badge: 'طعم شرقي', popular: true, variants: [{ label: 'وسط', price: 50 }, { label: 'كبير', price: 60 }, { label: 'عائلي', price: 75 }] },
+            { id: 'pizza-6', category: 'pizza', name: 'بيتزا فراخ', desc: 'قطع الدجاج المتبلة المشوية مع الفلفل الرومي والزيتون والجبنة الموتزاريلا', variants: [{ label: 'وسط', price: 40 }, { label: 'كبير', price: 50 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pizza-7', category: 'pizza', name: 'بيتزا بانيه', desc: 'قطع صدور الدجاج البانيه المقرمشة مع صوص البيتزا والجبن الذائب', variants: [{ label: 'وسط', price: 40 }, { label: 'كبير', price: 50 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pizza-8', category: 'pizza', name: 'بيتزا لحمة', desc: 'لحم مفروم بلدي معصج بالتوابل مع الخضروات الطازجة والموتزاريلا', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 50 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pizza-9', category: 'pizza', name: 'بيتزا تونة', desc: 'تونة فاخرة مع شرائح البصل والفلفل الأخضر والزيتون الأسود والجبن', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pizza-10', category: 'pizza', name: 'بيتزا سوسيس', desc: 'حلقات السوسيس المدخن مع صوص الطماطم الإيطالي والجبنة الموتزاريلا', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pizza-11', category: 'pizza', name: 'بيتزا سجق', desc: 'سجق بلدي متبل بالخلطة الحارة الاختيارية مع الطماطم والفلفل والموتزاريلا', badge: 'حرش', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pizza-12', category: 'pizza', name: 'بيتزا ميكس جبنة', desc: 'عشاق الجبن! مزيج ساحر من الموتزاريلا، الرومي، والشيدر الذائبة', badge: 'عشاق الجبن', popular: true, variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pizza-13', category: 'pizza', name: 'بيتزا ميكسيكانو', desc: 'نكهة مكسيكية مميزة مع الفلفل الحار والصلصة المتبلة والجبن', badge: 'سبايسي', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 55 }] },
+            { id: 'pizza-14', category: 'pizza', name: 'بيتزا مارجريتا', desc: 'الكلاسيكية الإيطالية بصوص الطماطم الغني والأوريجانو وطبقة الموتزاريلا', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 55 }] },
+            { id: 'pizza-15', category: 'pizza', name: 'بيتزا مشروم', desc: 'شرائح المشروم الطازج مع الفلفل والزيتون والجبنة الموتزاريلا', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 55 }] },
+            { id: 'pizza-16', category: 'pizza', name: 'حواوشي اسكندراني', desc: 'عجينة مخبوزة في الفرن بحشوة اللحم البلدي المتبل على الطريقة الإسكندراني', badge: 'اقتصادي ومميز', popular: true, variants: [{ label: 'وسط', price: 15 }, { label: 'كبير', price: 30 }, { label: 'عائلي', price: 45 }] },
+
+            // ----------------------------------------------------
+            // 2. ركن الفطائر (وسط | كبير | عائلي)
+            // ----------------------------------------------------
+            { id: 'pies-1', category: 'pies', name: 'فطيرة ويمبي', desc: 'فطيرة شرقية مورقة بحشوة ويمبي الخاصة الغنية باللحوم والجبن', badge: 'مخصوص ويمبي', popular: true, variants: [{ label: 'وسط', price: 50 }, { label: 'كبير', price: 60 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pies-2', category: 'pies', name: 'فطيرة بسطرمة', desc: 'فطيرة شرقية محشوة بشرائح البسطرمة البلدي والجبن والفلفل والزيتون', popular: true, variants: [{ label: 'وسط', price: 50 }, { label: 'كبير', price: 60 }, { label: 'عائلي', price: 75 }] },
+            { id: 'pies-3', category: 'pies', name: 'فطيرة فراخ', desc: 'فطيرة مورقة بحشوة قطع الدجاج المتبلة والخضروات والجبن', variants: [{ label: 'وسط', price: 40 }, { label: 'كبير', price: 50 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pies-4', category: 'pies', name: 'فطيرة بانيه', desc: 'فطيرة شرقية محشوة بقطع الدجاج البانيه الذهبية والجبن السائح', variants: [{ label: 'وسط', price: 40 }, { label: 'كبير', price: 50 }, { label: 'عائلي', price: 70 }] },
+            { id: 'pies-5', category: 'pies', name: 'فطيرة رومي', desc: 'فطيرة شرقية غنية بالجبنة الرومي المعتقة والخضروات والزيتون', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pies-6', category: 'pies', name: 'فطيرة لحمة', desc: 'فطيرة شرقية باللحم المفروم البلدي المعصج والفلفل والجبن', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 50 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pies-7', category: 'pies', name: 'فطيرة مشكل جبنة', desc: 'فطيرة مورقة محشوة بمزيج غني من الأجبان الذائبة', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pies-8', category: 'pies', name: 'فطيرة سجق', desc: 'فطيرة شرقية بالسجق البلدي المتبل مع الطماطم والفلفل والجبن', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pies-9', category: 'pies', name: 'فطيرة سوسيس', desc: 'فطيرة شرقية بحلقات السوسيس والجبنة الموتزاريلا والزيتون', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pies-10', category: 'pies', name: 'فطيرة تونة', desc: 'فطيرة شرقية بالتونة الفاخرة والفلفل الأخضر والزيتون', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pies-11', category: 'pies', name: 'فطيرة خضروات', desc: 'فطيرة خفيفة وصحية بتشكيلة خضروات طازجة مع الزيتون والجبن', variants: [{ label: 'وسط', price: 35 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 55 }] },
+            { id: 'pies-12', category: 'pies', name: 'فطيرة حلو ويمبي', desc: 'فطيرة الحلو المميزة من ويمبي بالقشطة والمكسرات والعسل والشيكولاتة', badge: 'حلو فاخر', popular: true, variants: [{ label: 'وسط', price: 30 }, { label: 'كبير', price: 45 }, { label: 'عائلي', price: 60 }] },
+            { id: 'pies-13', category: 'pies', name: 'فطيرة قشطة وعسل', desc: 'فطيرة مورقة ساخنة مغطاة بالقشطة الطازجة وعسل النحل الصافي', badge: 'حلو شرقي', variants: [{ label: 'وسط', price: 25 }, { label: 'كبير', price: 35 }, { label: 'عائلي', price: 55 }] },
+            { id: 'pies-14', category: 'pies', name: 'فطيرة شيكولاتة', desc: 'فطيرة حلوة غنية بصوص الشيكولاتة السائحة اللذيذة', badge: 'حلو', variants: [{ label: 'وسط', price: 25 }, { label: 'كبير', price: 35 }, { label: 'عائلي', price: 50 }] },
+            { id: 'pies-15', category: 'pies', name: 'فطيرة مكسرات', desc: 'فطيرة شرقية حلوة محشوة بتشكيلة مكسرات محمصة وجوز هند وزبيب', badge: 'حلو', variants: [{ label: 'وسط', price: 20 }, { label: 'كبير', price: 35 }, { label: 'عائلي', price: 45 }] },
+            { id: 'pies-16', category: 'pies', name: 'فطيرة سكر وكريمة', desc: 'فطيرة الكريمة الدافئة المرشوشة بالسكر البودرة الناعم', badge: 'حلو كلاسيك', variants: [{ label: 'وسط', price: 15 }, { label: 'كبير', price: 25 }, { label: 'عائلي', price: 40 }] },
+
+            // ----------------------------------------------------
+            // 3. ركن الشويات (Single Price)
+            // ----------------------------------------------------
+            { id: 'grills-1', category: 'grills', name: 'كيلو ضاني مشوي', desc: 'كيلو لحم ضاني بلدي مشوي على الفحم بتتبيلة الحاتي الأصيلة', badge: 'مشويات فحم', popular: true, variants: [{ label: 'كيلو', price: 280 }] },
+            { id: 'grills-2', category: 'grills', name: 'كيلو مشكل ضاني', desc: 'تشكيلة فاخرة من كباب وكفتة وريش ضاني مشوية على الفحم (1 كيلو)', badge: 'وليمة مشويات', popular: true, variants: [{ label: 'كيلو', price: 240 }] },
+            { id: 'grills-3', category: 'grills', name: 'كيلو عجالي مشوي', desc: 'كيلو كباب ولحم عجالي بلدي طري مشوي على الفحم', variants: [{ label: 'كيلو', price: 240 }] },
+            { id: 'grills-4', category: 'grills', name: 'كيلو مشكل عجالي', desc: 'كيلو مشكل كباب وكفتة عجالي بلدي مشوي على الفحم', variants: [{ label: 'كيلو', price: 220 }] },
+            { id: 'grills-5', category: 'grills', name: 'كيلو كفتة عجالي', desc: 'كيلو كفتة الحاتي العجالي المشوية على الفحم برائحة الفحم المميزة', popular: true, variants: [{ label: 'كيلو', price: 200 }] },
+            { id: 'grills-6', category: 'grills', name: 'فرخة بلدي كاملة', desc: 'فرخة بلدي كاملة محمرة ومشوية بتتبيلة ويمبي الخاصة', variants: [{ label: 'فرخة كاملة', price: 120 }] },
+            { id: 'grills-7', category: 'grills', name: 'فرخة شيش كاملة', desc: 'فرخة كاملة مخلية أو مقطعة شيش متبلة ومشوية على الفحم', popular: true, variants: [{ label: 'فرخة كاملة', price: 110 }] },
+            { id: 'grills-8', category: 'grills', name: 'فرخة فحم كاملة', desc: 'فرخة كاملة مشوية على الفحم بتتبيلة الأعشاب والليمون', variants: [{ label: 'فرخة كاملة', price: 100 }] },
+
+            // ----------------------------------------------------
+            // 4. ركن الطبخ (شامل خضار وأرز | سلطات فقط)
+            // ----------------------------------------------------
+            { id: 'cooking-1', category: 'cooking', name: 'طلب مورة ضاني', desc: 'قطعة موزة/مورة ضاني بلدي مطبوخة بعناية فائقة ومرقة غنية', badge: 'طبخ بلدي', popular: true, variants: [{ label: 'شامل خضار وأرز', price: 110 }, { label: 'سلطات فقط', price: 100 }] },
+            { id: 'cooking-2', category: 'cooking', name: 'طلب لحمة ضاني', desc: 'وجبة لحم ضاني بلدي طري مطبوخ على الطريقة المصرية الأصيلة', variants: [{ label: 'شامل خضار وأرز', price: 100 }, { label: 'سلطات فقط', price: 90 }] },
+            { id: 'cooking-3', category: 'cooking', name: 'طلب مورة عجالي', desc: 'مورة عجالي بلدي مستوية في الصوص الدافئ', variants: [{ label: 'شامل خضار وأرز', price: 90 }, { label: 'سلطات فقط', price: 80 }] },
+            { id: 'cooking-4', category: 'cooking', name: 'طلب لحمة عجالي', desc: 'قطع لحم عجالي بلدي مطبوخة طازجة يومياً', popular: true, variants: [{ label: 'شامل خضار وأرز', price: 80 }, { label: 'سلطات فقط', price: 70 }] },
+            { id: 'cooking-5', category: 'cooking', name: 'فراخ بلدي (نصف)', desc: 'نصف فرخة بلدي محمرة ذهبية مع الشوربة والمرقة', variants: [{ label: 'شامل خضار وأرز', price: 70 }, { label: 'سلطات فقط', price: 60 }] },
+            { id: 'cooking-6', category: 'cooking', name: 'فراخ شيش (ربع)', desc: 'وجبة ربع فرخة شيش متبلة ومشوية على الفحم', variants: [{ label: 'شامل خضار وأرز', price: 65 }, { label: 'سلطات فقط', price: 55 }] },
+            { id: 'cooking-7', category: 'cooking', name: 'فراخ فحم (نصف)', desc: 'وجبة نصف فرخة مشوية على الفحم بتتبيلة الحاتي', popular: true, variants: [{ label: 'شامل خضار وأرز', price: 60 }, { label: 'سلطات فقط', price: 50 }] },
+            { id: 'cooking-8', category: 'cooking', name: 'فرد حمام بالفريك', desc: 'حمام بلدي محشي بالفريك البلدي المتبل والمحمر في السمن', badge: 'أكلة ملوكي', popular: true, variants: [{ label: 'شامل خضار وأرز', price: 60 }, { label: 'سلطات فقط', price: 50 }] },
+            { id: 'cooking-9', category: 'cooking', name: 'فراخ فحم (ربع)', desc: 'وجبة اقتصادية: ربع فرخة مشوية على الفحم طازجة', badge: 'وجبة التوفير', variants: [{ label: 'شامل خضار وأرز', price: 35 }, { label: 'سلطات فقط', price: 25 }] },
+
+            // ----------------------------------------------------
+            // 5. ركن الكريب (Single Price)
+            // ----------------------------------------------------
+            { id: 'crepe-1', category: 'crepe', name: 'كريب شيش', desc: 'قطع شيش طاووق مشوية مع الفلفل والزيتون والجبن والصوصات في عجينة كريب مقرمشة', popular: true, variants: [{ label: 'حجم كبير', price: 25 }] },
+            { id: 'crepe-2', category: 'crepe', name: 'كريب ميكس لحوم', desc: 'مزيج غني من اللحوم المتبلة مع الجبنة الموتزاريلا والكاتشب والمايونيز', badge: 'الأكثر مبيعاً', popular: true, variants: [{ label: 'حجم كبير', price: 25 }] },
+            { id: 'crepe-3', category: 'crepe', name: 'كريب ميكس فراخ', desc: 'تشكيلة دجاج (شيش وبانيه وكرسبي) مع الجبن والصوصات داخل الكريب', popular: true, variants: [{ label: 'حجم كبير', price: 25 }] },
+            { id: 'crepe-4', category: 'crepe', name: 'كريب فراخ', desc: 'حشوة مضاعفة من قطع الدجاج المتبلة مع الموتزاريلا والفلفل والزيتون', badge: 'سوبر', variants: [{ label: 'حجم سوبر', price: 30 }] },
+            { id: 'crepe-5', category: 'crepe', name: 'كريب لحمة', desc: 'كريب محشو باللحم البلدي المتبل والجبن السائح والخضروات', variants: [{ label: 'حجم كبير', price: 25 }] },
+            { id: 'crepe-6', category: 'crepe', name: 'كريب بانيه', desc: 'قطع دجاج بانيه مقرمشة ذهبية مع الموتزاريلا والصوصات', variants: [{ label: 'حجم كبير', price: 25 }] },
+            { id: 'crepe-7', category: 'crepe', name: 'كريب سوسيس', desc: 'شرائح السوسيس المدخن مع الجبن الذائب والكاتشب والمايونيز', variants: [{ label: 'حجم كبير', price: 25 }] },
+            { id: 'crepe-8', category: 'crepe', name: 'كريب برجر', desc: 'قطع برجر مشوية مع الجبن الشيدر والموتزاريلا والصوصات', variants: [{ label: 'حجم كبير', price: 25 }] },
+            { id: 'crepe-9', category: 'crepe', name: 'كريب سجق', desc: 'سجق بلدي متبل مع الفلفل والطماطم والجبنة الموتزاريلا', variants: [{ label: 'حجم كبير', price: 25 }] },
+            { id: 'crepe-10', category: 'crepe', name: 'كريب لحمة سادة', desc: 'كريب لحمة خفيف وسريع بالسعر الاقتصادي', variants: [{ label: 'سادة', price: 20 }] },
+            { id: 'crepe-11', category: 'crepe', name: 'كريب فراخ سادة', desc: 'كريب دجاج سادة شهي ومقرمش', variants: [{ label: 'سادة', price: 20 }] },
+            { id: 'crepe-12', category: 'crepe', name: 'كريب أنواع سادة', desc: 'كريب جبن أو بطاطس أو إضافات سادة حسب اختيارك', variants: [{ label: 'سادة', price: 15 }] },
+            { id: 'crepe-13', category: 'crepe', name: 'كريب بانيه سادة', desc: 'كريب بانيه سادة مقرمش واقتصادي', variants: [{ label: 'سادة', price: 15 }] },
+
+            // ----------------------------------------------------
+            // 6. ركن الباستا (Single Price)
+            // ----------------------------------------------------
+            { id: 'pasta-1', category: 'pasta', name: 'باستا ميكس لحوم', desc: 'طاجن أو طبق باستا غني بقطع اللحوم المشكلة والصوص الكريمي والجبن', popular: true, variants: [{ label: 'طلب', price: 25 }] },
+            { id: 'pasta-2', category: 'pasta', name: 'باستا ميكس فراخ', desc: 'باستا إيطالية بقطع الدجاج المشكلة والصوص الأبيض أو الأحمر والموتزاريلا', popular: true, variants: [{ label: 'طلب', price: 25 }] },
+            { id: 'pasta-3', category: 'pasta', name: 'باستا ميكس جبنة', desc: 'باستا غارقة في مزيج الأجبان السائحة (موتزاريلا، رومي، شيدر)', variants: [{ label: 'طلب', price: 25 }] },
+            { id: 'pasta-4', category: 'pasta', name: 'باستا فراخ', desc: 'مكرونة باستا بقطع الدجاج المتبلة والصوص الغني', variants: [{ label: 'طلب', price: 20 }] },
+            { id: 'pasta-5', category: 'pasta', name: 'باستا بانيه', desc: 'باستا مع شرائح الدجاج البانيه المقرمشة والصوص', variants: [{ label: 'طلب', price: 20 }] },
+            { id: 'pasta-6', category: 'pasta', name: 'باستا لحمة', desc: 'مكرونة باستا باللحم المفروم البلدي المتبل والصلصة', variants: [{ label: 'طلب', price: 15 }] },
+            { id: 'pasta-7', category: 'pasta', name: 'باستا سجق', desc: 'باستا بالسجق الشرقي المتبل والفلفل والصوص', variants: [{ label: 'طلب', price: 15 }] },
+            { id: 'pasta-8', category: 'pasta', name: 'باستا سوسيس', desc: 'باستا بحلقات السوسيس والصوص الشهي', variants: [{ label: 'طلب', price: 15 }] },
+            { id: 'pasta-9', category: 'pasta', name: 'باستا سادة', desc: 'طبق مكرونة باستا بالصوص الشهي', variants: [{ label: 'طلب', price: 10 }] },
+            { id: 'pasta-10', category: 'pasta', name: 'مكرونة بالبشاميل', desc: 'طاجن مكرونة بالبشاميل الذهبي المحمر في الفرن باللحم المفروم', badge: 'طعم بيتي', popular: true, variants: [{ label: 'طاجن', price: 10 }] },
+
+            // ----------------------------------------------------
+            // 7. ركن الطلبات (Single Price)
+            // ----------------------------------------------------
+            { id: 'orders-1', category: 'orders', name: 'طلب مخ', desc: 'طلب مخ بانيه ذهبي مقرمش من الخارج وطري من الداخل بالتتبيلة الخاصة', badge: 'فاخر', popular: true, variants: [{ label: 'طلب', price: 65 }] },
+            { id: 'orders-2', category: 'orders', name: 'طلب مشكل', desc: 'طبق مشكل حرش (كبدة، مخ، سجق، حلويات) متبل على أصوله', badge: 'أكلة المزاج', popular: true, variants: [{ label: 'طلب', price: 60 }] },
+            { id: 'orders-3', category: 'orders', name: 'طلب كبدة بلدي', desc: 'طلب كبدة بلدي طازجة مشوية أو محمرة بالثوم والكزبرة والكمون', popular: true, variants: [{ label: 'طلب', price: 60 }] },
+            { id: 'orders-4', category: 'orders', name: 'طلب فراخ بانيه', desc: 'طلب شرائح صدور دجاج بانيه مقرمشة ذهبية', variants: [{ label: 'طلب', price: 50 }] },
+            { id: 'orders-5', category: 'orders', name: 'طلب بوفتيك', desc: 'شرائح لحم بوفتيك بلدي متبلة ومقلية بالبقسماط الذهبي', variants: [{ label: 'طلب', price: 50 }] },
+            { id: 'orders-6', category: 'orders', name: 'طلب كبدة بانيه', desc: 'شرائح كبدة مقلية بالردة أو البانيه بالتتبيلة المصرية الأصيلة', variants: [{ label: 'طلب', price: 50 }] },
+            { id: 'orders-7', category: 'orders', name: 'طلب كبدة اسكندراني', desc: 'كبدة عصافيري على الطريقة الإسكندراني مع الفلفل الأخضر الحار أو البارد والليمون', variants: [{ label: 'طلب', price: 30 }] },
+            { id: 'orders-8', category: 'orders', name: 'طلب حلويات', desc: 'طلب حلويات المدبح المشوحة بالتوابل والفلفل', variants: [{ label: 'طلب', price: 30 }] },
+            { id: 'orders-9', category: 'orders', name: 'طلب ممبار', desc: 'ممبار بلدي محشي بخلطة الأرز والخضرة الطازجة ومحمر للون الذهبي', popular: true, variants: [{ label: 'طلب', price: 30 }] },
+            { id: 'orders-10', category: 'orders', name: 'طلب محاشي', desc: 'تشكيلة محاشي بيتي ساخنة مطبوخة بالشوربة الدسمة', variants: [{ label: 'طلب', price: 30 }] },
+            { id: 'orders-11', category: 'orders', name: 'طلب جلاش', desc: 'جلاش مورق محشو باللحم المفروم المعصج ومحمر في الفرن', variants: [{ label: 'طلب', price: 20 }] },
+            { id: 'orders-12', category: 'orders', name: 'باكيت بطاطس', desc: 'باكيت بطاطس فارم فريتس محمرة ومقرمشة مع التوابل', variants: [{ label: 'باكيت', price: 10 }] },
+
+            // ----------------------------------------------------
+            // 8. ركن السندوتشات (Single Price)
+            // ----------------------------------------------------
+            { id: 'sand-1', category: 'sandwiches', name: 'رغيف مخ', desc: 'سندوتش مخ بانيه طازج مع الطحينة والسلطة الخضراء', popular: true, variants: [{ label: 'رغيف', price: 20 }] },
+            { id: 'sand-2', category: 'sandwiches', name: 'رغيف كبدة بلدي', desc: 'سندوتش كبدة بلدي صافي متبلة مع سلطة الطحينة', popular: true, variants: [{ label: 'رغيف', price: 20 }] },
+            { id: 'sand-3', category: 'sandwiches', name: 'رغيف كفتة فحم', desc: 'سندوتش كفتة الحاتي المشوية على الفحم مع البقدونس والطحينة', popular: true, variants: [{ label: 'رغيف', price: 20 }] },
+            { id: 'sand-4', category: 'sandwiches', name: 'رغيف كبدة بانيه', desc: 'سندوتش كبدة بالردة ساخن مع السلطة والطحينة', variants: [{ label: 'رغيف', price: 20 }] },
+            { id: 'sand-5', category: 'sandwiches', name: 'رغيف حواوشي بالجبنة', desc: 'رغيف حواوشي بلدي مقرمش محشو باللحم المتبل والجبنة السائحة', badge: 'خطير', popular: true, variants: [{ label: 'رغيف', price: 20 }] },
+            { id: 'sand-6', category: 'sandwiches', name: 'رغيف بوفتيك', desc: 'سندوتش بوفتيك لحم مقرمش مع الصوص والسلطة', variants: [{ label: 'رغيف', price: 15 }] },
+            { id: 'sand-7', category: 'sandwiches', name: 'رغيف فراخ بانيه', desc: 'سندوتش صدور دجاج بانيه مقرمش مع المايونيز والكاتشب', variants: [{ label: 'رغيف', price: 15 }] },
+            { id: 'sand-8', category: 'sandwiches', name: 'رغيف كبدة اسكندراني', desc: 'سندوتش كبدة اسكندراني بالفلفل والليمون', variants: [{ label: 'رغيف', price: 10 }] },
+            { id: 'sand-9', category: 'sandwiches', name: 'رغيف حلويات', desc: 'سندوتش حلويات مشوحة بالتوابل الحرشة', variants: [{ label: 'رغيف', price: 10 }] },
+            { id: 'sand-10', category: 'sandwiches', name: 'رغيف حواوشي فحم', desc: 'رغيف حواوشي مشوي على الفحم برائحة الشوي المميزة', badge: 'الأكثر مبيعاً', popular: true, variants: [{ label: 'رغيف', price: 10 }] }
+        ];
+
+        /* ============================================================================
+           2. APPLICATION STATE & AUDIO SYNTHESIZER (WEB AUDIO API)
+           ============================================================================ */
+        const state = {
+            activeCategory: 'all',
+            searchQuery: '',
+            sortBy: 'default',
+            onlyPopular: false,
+            selectedVariants: {}, // maps itemId -> variantIndex
+            cart: [],             // array of { key, itemId, name, categoryName, variantLabel, price, qty }
+            orderType: 'توصيل للمنزل',
+            soundEnabled: true
+        };
+
+        // Initialize default variant selection (0 = first option, e.g. 'وسط' or 'شامل خضار وأرز')
+        MENU_ITEMS.forEach(item => {
+            state.selectedVariants[item.id] = 0;
+        });
+
+        // Subtle Tactile Web Audio Synthesizer (Zero External Audio Dependencies)
+        let audioCtx = null;
+        function playUiSound(type = 'pop') {
+            if (!state.soundEnabled) return;
+            try {
+                if (!audioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) audioCtx = new AudioContextClass();
+                }
+                if (!audioCtx) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'add') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(420, now);
+                    osc.frequency.exponentialRampToValueAtTime(780, now + 0.11);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'switch') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(440, now + 0.06);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.start(now);
+                    osc.stop(now + 0.06);
+                }
+            } catch (e) {
+                // Ignore audio errors on restricted devices
+            }
+        }
+
+        function toggleSoundFx() {
+            state.soundEnabled = !state.soundEnabled;
+            const icon = document.getElementById('soundIcon');
+            if (state.soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high text-sm text-amber-400';
+                playUiSound('switch');
+                showToast('تم تفعيل المؤثرات الصوتية التفاعلية', 'info');
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-sm text-stone-500';
+            }
+        }
+
+        /* ============================================================================
+           3. HIGH-DPI HTML5 CANVAS EMBER & CULINARY PARTICLE ENGINE (60FPS, ZERO GC)
+           ============================================================================ */
+        const EmberEngine = (function () {
+            const canvas = document.getElementById('emberCanvas');
+            const ctx = canvas.getContext('2d', { alpha: true });
+
+            let width = 0;
+            let height = 0;
+            let dpr = 1;
+            let lastTime = performance.now();
+
+            // Pre-allocated Particle Pool (Zero Garbage Collection inside RAF)
+            const MAX_PARTICLES = 75;
+            const particles = new Array(MAX_PARTICLES);
+            const pointer = { x: -1000, y: -1000, vx: 0, vy: 0, lastX: -1000, lastY: -1000, active: false };
+
+            const PALETTE = [
+                '245, 158, 11',  // Warm Amber
+                '251, 191, 36',  // Golden Spark
+                '239, 68, 68',   // Fiery Crimson
+                '217, 119, 6'    // Deep Oven Orange
+            ];
+
+            function createParticleObj() {
+                return {
+                    x: 0, y: 0,
+                    vx: 0, vy: 0,
+                    size: 2,
+                    alpha: 0.5,
+                    maxAlpha: 0.7,
+                    phase: 0,
+                    phaseSpeed: 1,
+                    colorRgb: PALETTE[0],
+                    isBurst: false,
+                    life: 1
+                };
+            }
+
+            function resetParticle(p, randomY = false) {
+                p.x = Math.random() * width;
+                p.y = randomY ? Math.random() * height : height + 20;
+                p.vx = (Math.random() - 0.5) * 18;
+                p.vy = -(15 + Math.random() * 35); // Upward warm convection
+                p.size = 1.2 + Math.random() * 2.8;
+                p.maxAlpha = 0.2 + Math.random() * 0.55;
+                p.alpha = p.maxAlpha;
+                p.phase = Math.random() * Math.PI * 2;
+                p.phaseSpeed = 1 + Math.random() * 2;
+                p.colorRgb = PALETTE[(Math.random() * PALETTE.length) | 0];
+                p.isBurst = false;
+                p.life = 1;
+            }
+
+            function resize() {
+                dpr = Math.min(window.devicePixelRatio || 1, 2);
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = Math.floor(width * dpr);
+                canvas.height = Math.floor(height * dpr);
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+
+            function init() {
+                resize();
+                for (let i = 0; i < MAX_PARTICLES; i++) {
+                    particles[i] = createParticleObj();
+                    resetParticle(particles[i], true);
+                }
+
+                window.addEventListener('resize', resize, { passive: true });
+                window.addEventListener('mousemove', e => {
+                    pointer.vx = e.clientX - pointer.x;
+                    pointer.vy = e.clientY - pointer.y;
+                    pointer.x = e.clientX;
+                    pointer.y = e.clientY;
+                    pointer.active = true;
+                }, { passive: true });
+
+                window.addEventListener('touchmove', e => {
+                    if (e.touches && e.touches[0]) {
+                        pointer.x = e.touches[0].clientX;
+                        pointer.y = e.touches[0].clientY;
+                        pointer.active = true;
+                    }
+                }, { passive: true });
+
+                requestAnimationFrame(loop);
+            }
+
+            // Trigger burst at screen coordinates when user adds item to cart
+            function triggerBurst(clientX, clientY) {
+                let spawned = 0;
+                for (let i = 0; i < MAX_PARTICLES && spawned < 14; i++) {
+                    const p = particles[i];
+                    if (!p.isBurst) {
+                        const angle = (Math.PI * 2 * spawned) / 14 + (Math.random() * 0.3);
+                        const speed = 60 + Math.random() * 110;
+                        p.x = clientX;
+                        p.y = clientY;
+                        p.vx = Math.cos(angle) * speed;
+                        p.vy = Math.sin(angle) * speed - 30;
+                        p.size = 2.5 + Math.random() * 2.5;
+                        p.alpha = 0.95;
+                        p.maxAlpha = 0.95;
+                        p.colorRgb = PALETTE[spawned % 2];
+                        p.isBurst = true;
+                        p.life = 1;
+                        spawned++;
+                    }
+                }
+            }
+
+            function loop(now) {
+                const dt = Math.min((now - lastTime) / 1000, 0.1);
+                lastTime = now;
+
+                ctx.clearRect(0, 0, width, height);
+
+                for (let i = 0; i < MAX_PARTICLES; i++) {
+                    const p = particles[i];
+
+                    if (p.isBurst) {
+                        p.x += p.vx * dt;
+                        p.y += p.vy * dt;
+                        p.vx *= 0.94;
+                        p.vy *= 0.94;
+                        p.life -= dt * 1.6;
+                        p.alpha = Math.max(0, p.life);
+                        if (p.life <= 0) {
+                            resetParticle(p, false);
+                        }
+                    } else {
+                        p.phase += p.phaseSpeed * dt;
+                        // Organic horizontal sway + upward ember float
+                        p.x += (p.vx + Math.sin(p.phase) * 12) * dt;
+                        p.y += p.vy * dt;
+
+                        // Interactive Pointer Repulsion Physics
+                        if (pointer.active) {
+                            const dx = p.x - pointer.x;
+                            const dy = p.y - pointer.y;
+                            const distSq = dx * dx + dy * dy;
+                            const radius = 130;
+                            if (distSq < radius * radius && distSq > 1) {
+                                const dist = Math.sqrt(distSq);
+                                const force = (1 - dist / radius) * 90;
+                                p.x += (dx / dist) * force * dt;
+                                p.y += (dy / dist) * force * dt;
+                            }
+                        }
+
+                        // Twinkle alpha modulation
+                        p.alpha = p.maxAlpha * (0.65 + 0.35 * Math.sin(p.phase * 1.5));
+
+                        // Wrap boundaries
+                        if (p.y < -20 || p.x < -30 || p.x > width + 30) {
+                            resetParticle(p, false);
+                        }
+                    }
+
+                    // Draw glowing ember particle
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${p.colorRgb}, ${p.alpha.toFixed(2)})`;
+                    ctx.fill();
+
+                    // Outer soft halo for larger embers
+                    if (p.size > 2.2) {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size * 2.4, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(${p.colorRgb}, ${(p.alpha * 0.18).toFixed(2)})`;
+                        ctx.fill();
+                    }
+                }
+
+                requestAnimationFrame(loop);
+            }
+
+            return { init, triggerBurst };
+        })();
+
+        /* ============================================================================
+           4. CATEGORY SVG ARTWORK GENERATOR
+           ============================================================================ */
+        function getCategoryArtworkBadge(category) {
+            const configs = {
+                pizza: { icon: 'fa-pizza-slice', grad: 'from-amber-500/20 to-red-600/20', text: 'text-amber-400', border: 'border-amber-500/30' },
+                pies: { icon: 'fa-stroopwafel', grad: 'from-yellow-500/20 to-amber-600/20', text: 'text-yellow-400', border: 'border-yellow-500/30' },
+                grills: { icon: 'fa-fire-burner', grad: 'from-red-500/20 to-orange-600/20', text: 'text-red-400', border: 'border-red-500/30' },
+                cooking: { icon: 'fa-bowl-rice', grad: 'from-orange-500/20 to-amber-700/20', text: 'text-orange-400', border: 'border-orange-500/30' },
+                crepe: { icon: 'fa-bacon', grad: 'from-amber-400/20 to-yellow-600/20', text: 'text-amber-300', border: 'border-amber-400/30' },
+                pasta: { icon: 'fa-bowl-food', grad: 'from-red-400/20 to-amber-500/20', text: 'text-amber-400', border: 'border-amber-500/30' },
+                orders: { icon: 'fa-plate-wheat', grad: 'from-emerald-500/20 to-teal-700/20', text: 'text-emerald-400', border: 'border-emerald-500/30' },
+                sandwiches: { icon: 'fa-burger', grad: 'from-amber-500/20 to-orange-500/20', text: 'text-amber-400', border: 'border-amber-500/30' }
+            };
+            return configs[category] || configs.pizza;
+        }
+
+        /* ============================================================================
+           5. UI RENDERING: CATEGORY TABS & MENU CARDS
+           ============================================================================ */
+        function normalizeArabic(str) {
+            if (!str) return '';
+            return str
+                .replace(/[أإآ]/g, 'ا')
+                .replace(/ة/g, 'ه')
+                .replace(/ى/g, 'ي')
+                .toLowerCase()
+                .trim();
+        }
+
+        function renderCategoryTabs() {
+            const container = document.getElementById('categoryTabsContainer');
+            const counts = { all: MENU_ITEMS.length };
+            MENU_ITEMS.forEach(item => {
+                counts[item.category] = (counts[item.category] || 0) + 1;
+            });
+
+            container.innerHTML = CATEGORIES.map(cat => {
+                const isActive = state.activeCategory === cat.id && !state.onlyPopular;
+                const count = counts[cat.id] || 0;
+                return `
+                    <button onclick="selectCategory('${cat.id}')"
+                        class="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm transition-all duration-300 ${
+                            isActive
+                                ? 'bg-gradient-to-l from-amber-500 to-orange-600 text-stone-950 shadow-lg shadow-amber-500/25 scale-[1.02]'
+                                : 'bg-stone-900/90 hover:bg-stone-800 text-stone-300 border border-stone-800'
+                        }">
+                        <i class="fa-solid ${cat.icon}"></i>
+                        <span>${cat.name}</span>
+                        <span class="text-[11px] px-1.5 py-0.5 rounded-full ${
+                            isActive ? 'bg-stone-950/20 text-stone-950 font-black' : 'bg-stone-800 text-stone-400'
+                        }">${count}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectCategory(catId) {
+            playUiSound('switch');
+            state.activeCategory = catId;
+            state.onlyPopular = false;
+            renderCategoryTabs();
+            renderMenuGrid();
+        }
+
+        function filterByTag(tag) {
+            playUiSound('switch');
+            if (tag === 'popular') {
+                state.onlyPopular = !state.onlyPopular;
+                state.activeCategory = 'all';
+            }
+            renderCategoryTabs();
+            renderMenuGrid();
+            document.getElementById('menuSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleSearchAndFilter() {
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const sortSelect = document.getElementById('sortSelect');
+
+            state.searchQuery = searchInput.value;
+            state.sortBy = sortSelect.value;
+
+            if (state.searchQuery.trim().length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            renderMenuGrid();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            handleSearchAndFilter();
+        }
+
+        function resetAllFilters() {
+            state.activeCategory = 'all';
+            state.searchQuery = '';
+            state.sortBy = 'default';
+            state.onlyPopular = false;
+            document.getElementById('searchInput').value = '';
+            document.getElementById('sortSelect').value = 'default';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderCategoryTabs();
+            renderMenuGrid();
+        }
+
+        function renderMenuGrid() {
+            const container = document.getElementById('menuContainer');
+            const emptyState = document.getElementById('emptyState');
+            const resultsCountText = document.getElementById('resultsCountText');
+
+            const normQuery = normalizeArabic(state.searchQuery);
+
+            // Filter items
+            let filtered = MENU_ITEMS.filter(item => {
+                if (state.activeCategory !== 'all' && item.category !== state.activeCategory) return false;
+                if (state.onlyPopular && !item.popular) return false;
+                if (normQuery) {
+                    const haystack = normalizeArabic(`${item.name} ${item.desc} ${item.badge || ''}`);
+                    return haystack.includes(normQuery);
+                }
+                return true;
+            });
+
+            // Sort items if requested
+            if (state.sortBy === 'price-asc') {
+                filtered = [...filtered].sort((a, b) => a.variants[0].price - b.variants[0].price);
+            } else if (state.sortBy === 'price-desc') {
+                filtered = [...filtered].sort((a, b) => b.variants[0].price - a.variants[0].price);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                resultsCountText.textContent = '0 صنف مطابق';
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            resultsCountText.innerHTML = state.onlyPopular
+                ? `عرض <strong class="text-amber-400">${filtered.length}</strong> من الأصناف الأكثر طلباً`
+                : `عرض <strong class="text-amber-400">${filtered.length}</strong> صنف متاح للطلب الفوري`;
+
+            // Group by Category if sorting is default, otherwise render flat sorted grid
+            if (state.sortBy !== 'default') {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        ${filtered.map(item => createMenuCardHTML(item)).join('')}
+                    </div>
+                `;
+            } else {
+                const categoriesToRender = state.activeCategory === 'all'
+                    ? CATEGORIES.filter(c => c.id !== 'all')
+                    : CATEGORIES.filter(c => c.id === state.activeCategory);
+
+                container.innerHTML = categoriesToRender.map(cat => {
+                    const catItems = filtered.filter(i => i.category === cat.id);
+                    if (catItems.length === 0) return '';
+
+                    return `
+                        <section class="space-y-5">
+                            <!-- Section Banner Header -->
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-stone-800/90">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500/20 to-red-600/20 border border-amber-500/30 text-amber-400 flex items-center justify-center text-lg shadow-inner">
+                                        <i class="fa-solid ${cat.icon}"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="text-xl sm:text-2xl font-black text-white">${cat.name}</h3>
+                                            <span class="text-xs font-bold bg-stone-900 border border-stone-700 text-amber-400 px-2.5 py-0.5 rounded-full">
+                                                ${catItems.length} صنف
+                                            </span>
+                                        </div>
+                                        <p class="text-xs sm:text-sm text-stone-400 font-tajawal">${cat.subtitle || ''}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cards Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                                ${catItems.map(item => createMenuCardHTML(item)).join('')}
+                            </div>
+                        </section>
+                    `;
+                }).join('');
+            }
+
+            attach3DTiltListeners();
+        }
+
+        function createMenuCardHTML(item) {
+            const selectedIdx = state.selectedVariants[item.id] || 0;
+            const currentVariant = item.variants[selectedIdx] || item.variants[0];
+            const art = getCategoryArtworkBadge(item.category);
+            const hasMultipleVariants = item.variants.length > 1;
+
+            // Check if this specific item + variant is in cart
+            const cartKey = `${item.id}__${currentVariant.label}`;
+            const inCartItem = state.cart.find(c => c.key === cartKey);
+            const qtyInCart = inCartItem ? inCartItem.qty : 0;
+
+            return `
+                <article id="card-${item.id}" class="menu-card-3d rounded-2xl border border-stone-800/90 p-5 flex flex-col justify-between gap-4 group">
+                    <div class="relative z-10 space-y-3">
+                        <!-- Top Row: Icon + Title + Badges -->
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br ${art.grad} border ${art.border} ${art.text} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid ${art.icon} text-base"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-base sm:text-lg font-black text-white group-hover:text-amber-300 transition-colors leading-snug">
+                                        ${item.name}
+                                    </h4>
+                                    <p class="text-xs text-stone-400 font-tajawal line-clamp-2 mt-1 leading-relaxed">
+                                        ${item.desc}
+                                    </p>
+                                </div>
+                            </div>
+
+                            ${item.badge ? `
+                                <span class="shrink-0 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                                    ${item.badge}
+                                </span>
+                            ` : ''}
+                        </div>
+
+                        <!-- Interactive Variant Selector (For Pizza, Pies & Cooking) -->
+                        ${hasMultipleVariants ? `
+                            <div class="pt-1">
+                                <div class="text-[11px] text-stone-400 font-bold mb-1.5 flex items-center justify-between">
+                                    <span>اختر الحجم / النوع:</span>
+                                    <span class="text-amber-400/90 font-tajawal">يتغير السعر تلقائياً</span>
+                                </div>
+                                <div class="grid grid-cols-${item.variants.length} gap-1.5 bg-stone-950/90 p-1.5 rounded-xl border border-stone-800/90">
+                                    ${item.variants.map((v, idx) => {
+                                        const active = idx === selectedIdx;
+                                        return `
+                                            <button type="button"
+                                                onclick="selectItemVariant('${item.id}', ${idx})"
+                                                class="py-1.5 px-2 rounded-lg text-xs font-extrabold transition-all flex flex-col items-center justify-center ${
+                                                    active
+                                                        ? 'bg-gradient-to-b from-amber-400 to-amber-500 text-stone-950 shadow-md scale-[1.02]'
+                                                        : 'text-stone-300 hover:text-white hover:bg-stone-900'
+                                                }">
+                                                <span class="truncate max-w-full">${v.label}</span>
+                                                <span class="text-[11px] ${active ? 'text-stone-950 font-black' : 'text-amber-400'}">${v.price} ج</span>
+                                            </button>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- Card Footer: Dynamic Price & Add to Cart Control -->
+                    <div class="relative z-10 pt-3 border-t border-stone-800/80 flex items-center justify-between gap-3">
+                        <div>
+                            <span class="text-[11px] text-stone-400 block">${currentVariant.label}</span>
+                            <div class="flex items-baseline gap-1">
+                                <span id="price-${item.id}" class="text-xl sm:text-2xl font-black text-amber-400 transition-transform duration-200 inline-block">
+                                    ${currentVariant.price}
+                                </span>
+                                <span class="text-xs font-bold text-stone-300">ج.م</span>
+                            </div>
+                        </div>
+
+                        <div id="action-${item.id}" class="flex items-center gap-2">
+                            ${renderCardActionControlHTML(item.id, qtyInCart)}
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderCardActionControlHTML(itemId, qtyInCart) {
+            if (qtyInCart > 0) {
+                return `
+                    <div class="flex items-center bg-stone-950 border border-amber-500/50 rounded-xl p-1 gap-2">
+                        <button type="button" onclick="changeItemQtyFromCard('${itemId}', 1, event)"
+                            class="w-8 h-8 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 font-black flex items-center justify-center transition-colors">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </button>
+                        <span class="font-black text-sm text-amber-400 min-w-[20px] text-center">${qtyInCart}</span>
+                        <button type="button" onclick="changeItemQtyFromCard('${itemId}', -1, event)"
+                            class="w-8 h-8 rounded-lg bg-stone-800 hover:bg-red-500/20 text-stone-300 hover:text-red-400 font-black flex items-center justify-center transition-colors">
+                            <i class="fa-solid fa-minus text-xs"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            return `
+                <button type="button" onclick="addItemToCart('${itemId}', event)"
+                    class="bg-gradient-to-l from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 active:scale-95 text-stone-950 font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-md shadow-amber-500/15 transition-all">
+                    <i class="fa-solid fa-cart-plus"></i>
+                    <span>أضف للطلب</span>
+                </button>
+            `;
+        }
+
+        // Update only the specific card when variant is switched (Fast, zero layout thrashing)
+        function selectItemVariant(itemId, variantIdx) {
+            playUiSound('switch');
+            state.selectedVariants[itemId] = variantIdx;
+            const item = MENU_ITEMS.find(i => i.id === itemId);
+            if (!item) return;
+
+            const cardEl = document.getElementById(`card-${itemId}`);
+            if (cardEl) {
+                const temp = document.createElement('div');
+                temp.innerHTML = createMenuCardHTML(item).trim();
+                const newCard = temp.firstChild;
+                cardEl.replaceWith(newCard);
+                attach3DTiltToElement(newCard);
+            }
+        }
+
+        /* ============================================================================
+           6. 3D INTERACTIVE CARD TILT & SPECULAR GLEAM PHYSICS
+           ============================================================================ */
+        function attach3DTiltToElement(card) {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -3.5;
+                const rotateY = ((x - centerX) / centerX) * 3.5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px)`;
+            }, { passive: true });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            }, { passive: true });
+        }
+
+        function attach3DTiltListeners() {
+            const cards = document.querySelectorAll('.menu-card-3d');
+            cards.forEach(card => attach3DTiltToElement(card));
+        }
+
+        /* ============================================================================
+           7. CART ENGINE & STATE MANAGEMENT
+           ============================================================================ */
+        function addItemToCart(itemId, event) {
+            const item = MENU_ITEMS.find(i => i.id === itemId);
+            if (!item) return;
+
+            const variantIdx = state.selectedVariants[itemId] || 0;
+            const variant = item.variants[variantIdx] || item.variants[0];
+            const key = `${item.id}__${variant.label}`;
+            const catObj = CATEGORIES.find(c => c.id === item.category);
+
+            const existing = state.cart.find(c => c.key === key);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                state.cart.push({
+                    key,
+                    itemId: item.id,
+                    name: item.name,
+                    categoryName: catObj ? catObj.name : '',
+                    variantLabel: variant.label,
+                    price: variant.price,
+                    qty: 1
+                });
+            }
+
+            playUiSound('add');
+            if (event && event.clientX) {
+                EmberEngine.triggerBurst(event.clientX, event.clientY);
+            }
+
+            refreshCardActionState(itemId);
+            updateCartUI(true);
+            showToast(`تمت إضافة "${item.name} (${variant.label})" للسلة`, 'success');
+        }
+
+        function quickAddFeatured(itemId, variantLabel, price) {
+            const item = MENU_ITEMS.find(i => i.id === itemId);
+            if (!item) return;
+            const idx = item.variants.findIndex(v => v.label === variantLabel);
+            if (idx !== -1) state.selectedVariants[itemId] = idx;
+            addItemToCart(itemId, window.event);
+        }
+
+        function changeItemQtyFromCard(itemId, delta, event) {
+            const item = MENU_ITEMS.find(i => i.id === itemId);
+            if (!item) return;
+            const variantIdx = state.selectedVariants[itemId] || 0;
+            const variant = item.variants[variantIdx] || item.variants[0];
+            const key = `${item.id}__${variant.label}`;
+
+            updateCartItemQty(key, delta, event);
+        }
+
+        function updateCartItemQty(cartKey, delta, event) {
+            const idx = state.cart.findIndex(c => c.key === cartKey);
+            if (idx === -1) return;
+
+            const itemId = state.cart[idx].itemId;
+            state.cart[idx].qty += delta;
+
+            if (state.cart[idx].qty <= 0) {
+                state.cart.splice(idx, 1);
+                playUiSound('switch');
+            } else {
+                playUiSound('add');
+                if (delta > 0 && event && event.clientX) {
+                    EmberEngine.triggerBurst(event.clientX, event.clientY);
+                }
+            }
+
+            refreshCardActionState(itemId);
+            updateCartUI(delta > 0);
+        }
+
+        function clearCart() {
+            state.cart = [];
+            playUiSound('switch');
+            renderMenuGrid();
+            updateCartUI(false);
+            showToast('تم إفراغ سلة الطلبات', 'info');
+        }
+
+        function refreshCardActionState(itemId) {
+            const item = MENU_ITEMS.find(i => i.id === itemId);
+            if (!item) return;
+            const actionContainer = document.getElementById(`action-${itemId}`);
+            if (!actionContainer) return;
+
+            const variantIdx = state.selectedVariants[itemId] || 0;
+            const variant = item.variants[variantIdx] || item.variants[0];
+            const cartKey = `${item.id}__${variant.label}`;
+            const inCartItem = state.cart.find(c => c.key === cartKey);
+            const qty = inCartItem ? inCartItem.qty : 0;
+
+            actionContainer.innerHTML = renderCardActionControlHTML(itemId, qty);
+        }
+
+        function getCartTotals() {
+            let totalCount = 0;
+            let totalPrice = 0;
+            state.cart.forEach(item => {
+                totalCount += item.qty;
+                totalPrice += item.price * item.qty;
+            });
+            return { totalCount, totalPrice };
+        }
+
+        function updateCartUI(animateBump = false) {
+            const { totalCount, totalPrice } = getCartTotals();
+
+            // Header Cart Badge
+            const headerCount = document.getElementById('headerCartCount');
+            const headerTotal = document.getElementById('headerCartTotal');
+            const headerBtn = document.getElementById('headerCartBtn');
+
+            headerCount.textContent = totalCount;
+            headerTotal.textContent = `${totalPrice} ج.م`;
+
+            if (animateBump) {
+                headerBtn.classList.remove('cart-bump');
+                void headerBtn.offsetWidth;
+                headerBtn.classList.add('cart-bump');
+            }
+
+            // Floating Bottom Cart Bar
+            const floatingBar = document.getElementById('floatingCartBar');
+            const floatingCount = document.getElementById('floatingCartCount');
+            const floatingTotal = document.getElementById('floatingCartTotal');
+            const floatingSummary = document.getElementById('floatingCartSummary');
+
+            floatingCount.textContent = totalCount;
+            floatingTotal.textContent = `${totalPrice} ج.م`;
+
+            if (totalCount > 0) {
+                floatingBar.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+                floatingSummary.textContent = `${totalCount} صنف في السلة • اضغط لإتمام الطلب`;
+            } else {
+                floatingBar.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+            }
+
+            // Drawer Content
+            const cartItemsContainer = document.getElementById('cartItemsContainer');
+            const drawerSubtitle = document.getElementById('drawerItemCountSubtitle');
+            const clearCartBtn = document.getElementById('clearCartBtn');
+            const checkoutFormSection = document.getElementById('checkoutFormSection');
+            const cartFooterActions = document.getElementById('cartFooterActions');
+            const drawerTotalPrice = document.getElementById('drawerTotalPrice');
+
+            drawerTotalPrice.textContent = `${totalPrice} ج.م`;
+
+            if (state.cart.length === 0) {
+                drawerSubtitle.textContent = 'لا توجد أصناف مضافة بعد';
+                clearCartBtn.classList.add('hidden');
+                checkoutFormSection.classList.add('hidden');
+                cartFooterActions.classList.add('hidden');
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-14 px-4 space-y-3">
+                        <div class="w-16 h-16 rounded-2xl bg-stone-900 border border-stone-800 text-stone-500 flex items-center justify-center text-2xl mx-auto">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </div>
+                        <h4 class="text-base font-black text-stone-200">سلة طلباتك فارغة حالياً</h4>
+                        <p class="text-xs text-stone-400 font-tajawal">اختر أصنافك المفضلة من منيو ويمبي البساتين وأضفها للسلة لتظهر هنا</p>
+                    </div>
+                `;
+                return;
+            }
+
+            drawerSubtitle.textContent = `${totalCount} صنف جاهز للطلب`;
+            clearCartBtn.classList.remove('hidden');
+            checkoutFormSection.classList.remove('hidden');
+            cartFooterActions.classList.remove('hidden');
+
+            cartItemsContainer.innerHTML = state.cart.map(item => `
+                <div class="bg-stone-900/90 border border-stone-800 rounded-2xl p-3.5 flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <h5 class="font-black text-white text-sm truncate">${item.name}</h5>
+                            <span class="shrink-0 text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">
+                                ${item.variantLabel}
+                            </span>
+                        </div>
+                        <div class="text-xs text-stone-400 mt-1">
+                            سعر الوحدة: <span class="text-stone-200 font-bold">${item.price} ج.م</span>
+                            • الإجمالي: <span class="text-amber-400 font-black">${item.price * item.qty} ج.م</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 bg-stone-950 border border-stone-800 rounded-xl p-1 shrink-0">
+                        <button onclick="updateCartItemQty('${item.key}', 1, event)"
+                            class="w-7 h-7 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 font-black flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <span class="font-black text-xs text-white min-w-[20px] text-center">${item.qty}</span>
+                        <button onclick="updateCartItemQty('${item.key}', -1, event)"
+                            class="w-7 h-7 rounded-lg bg-stone-800 hover:bg-red-500/20 text-stone-300 hover:text-red-400 font-black flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleCartDrawer(open) {
+            const drawer = document.getElementById('cartDrawer');
+            const backdrop = document.getElementById('cartDrawerBackdrop');
+
+            if (open) {
+                drawer.classList.remove('-translate-x-full');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.add('-translate-x-full');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function setOrderType(type) {
+            state.orderType = type;
+            const btnDelivery = document.getElementById('orderTypeDelivery');
+            const btnPickup = document.getElementById('orderTypePickup');
+            const addressWrapper = document.getElementById('addressFieldWrapper');
+
+            if (type === 'توصيل للمنزل') {
+                btnDelivery.className = 'py-2 px-3 rounded-lg text-xs font-extrabold transition-all bg-amber-500 text-stone-950 shadow';
+                btnPickup.className = 'py-2 px-3 rounded-lg text-xs font-extrabold transition-all text-stone-300 hover:text-white';
+                addressWrapper.classList.remove('hidden');
+            } else {
+                btnPickup.className = 'py-2 px-3 rounded-lg text-xs font-extrabold transition-all bg-amber-500 text-stone-950 shadow';
+                btnDelivery.className = 'py-2 px-3 rounded-lg text-xs font-extrabold transition-all text-stone-300 hover:text-white';
+                addressWrapper.classList.add('hidden');
+            }
+        }
+
+        /* ============================================================================
+           8. WHATSAPP ORDER DISPATCH & HIGH-DPI CANVAS INVOICE GENERATOR
+           ============================================================================ */
+        function buildFormattedOrderText() {
+            const { totalCount, totalPrice } = getCartTotals();
+            const custName = document.getElementById('custName').value.trim() || 'عميل ويمبي';
+            const custPhone = document.getElementById('custPhone').value.trim() || 'غير محدد';
+            const custAddress = document.getElementById('custAddress').value.trim() || 'الخارجة - ميدان البساتين';
+            const custNotes = document.getElementById('custNotes').value.trim();
+
+            const lines = [
+                `🔥 *طلب جديد - مطعم ويمبي البساتين* 🔥`,
+                `📍 الوادي الجديد - الخارجة - ميدان البساتين`,
+                `─────────────────────`,
+                `👤 *الاسم:* ${custName}`,
+                `📱 *الموبايل:* ${custPhone}`,
+                `🛵 *نوع الطلب:* ${state.orderType}`
+            ];
+
+            if (state.orderType === 'توصيل للمنزل') {
+                lines.push(`🏠 *العنوان:* ${custAddress}`);
+            }
+            if (custNotes) {
+                lines.push(`📝 *ملاحظات:* ${custNotes}`);
+            }
+
+            lines.push(`─────────────────────`);
+            lines.push(`📋 *تفاصيل الأصناف (${totalCount}):*`);
+
+            state.cart.forEach((item, index) => {
+                lines.push(`${index + 1}. *${item.name}* (${item.variantLabel}) × ${item.qty} = *${item.price * item.qty} ج.م*`);
+            });
+
+            lines.push(`─────────────────────`);
+            lines.push(`💰 *الإجمالي المطلوب:* *${totalPrice} جنيه مصري*`);
+            lines.push(`⏰ وقت الطلب: ${new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}`);
+
+            return lines.join('\n');
+        }
+
+        function sendOrderWhatsApp(phoneNumber) {
+            if (state.cart.length === 0) {
+                showToast('أضف أصنافاً إلى السلة أولاً قبل إرسال الطلب', 'error');
+                return;
+            }
+            const text = buildFormattedOrderText();
+            const encoded = encodeURIComponent(text);
+            const url = `https://wa.me/${phoneNumber}?text=${encoded}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
+            showToast('جاري فتح واتساب لإرسال طلبك لمطعم ويمبي البساتين', 'success');
+        }
+
+        function copyOrderTextToClipboard() {
+            if (state.cart.length === 0) {
+                showToast('السلة فارغة حالياً', 'error');
+                return;
+            }
+            const text = buildFormattedOrderText();
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('تم نسخ تفاصيل الطلب إلى الحافظة بنجاح!', 'success');
+            } catch (err) {
+                showToast('تعذر النسخ التلقائي', 'error');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Render High-DPI Digital Invoice Receipt on HTML5 Canvas
+        function renderHighDpiReceiptCanvas() {
+            const canvas = document.getElementById('receiptCanvas');
+            const ctx = canvas.getContext('2d');
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            const items = state.cart.length > 0
+                ? state.cart
+                : [{ name: 'بيتزا ويمبي (مثال معاينة)', variantLabel: 'وسط', qty: 1, price: 50 }];
+
+            const width = 420;
+            const baseHeight = 310;
+            const rowHeight = 34;
+            const height = baseHeight + items.length * rowHeight;
+
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            // Background
+            ctx.fillStyle = '#141210';
+            ctx.fillRect(0, 0, width, height);
+
+            // Top Gold Accent Bar
+            const grad = ctx.createLinearGradient(0, 0, width, 0);
+            grad.addColorStop(0, '#f59e0b');
+            grad.addColorStop(1, '#ef4444');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, 8);
+
+            // Border
+            ctx.strokeStyle = '#292524';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(10, 16, width - 20, height - 26);
+
+            // Header Title
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = '900 22px Cairo, sans-serif';
+            ctx.fillText('مطعم ويمبي البساتين', width / 2, 52);
+
+            ctx.fillStyle = '#d6d3d1';
+            ctx.font = '600 12px Cairo, sans-serif';
+            ctx.fillText('الوادي الجديد - الخارجة - ميدان البساتين', width / 2, 74);
+            ctx.fillStyle = '#a8a29e';
+            ctx.fillText('ت: 01116056011 - 01280403637', width / 2, 94);
+
+            // Divider
+            ctx.strokeStyle = '#292524';
+            ctx.beginPath();
+            ctx.moveTo(25, 110);
+            ctx.lineTo(width - 25, 110);
+            ctx.stroke();
+
+            // Customer Info
+            const custName = document.getElementById('custName').value.trim() || 'عميل ويمبي الكريم';
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#fafaf9';
+            ctx.font = '700 13px Cairo, sans-serif';
+            ctx.fillText(`العميل: ${custName}`, width - 25, 134);
+            ctx.fillStyle = '#fbbf24';
+            ctx.fillText(`نوع الطلب: ${state.orderType}`, width - 25, 156);
+
+            // Items Header
+            ctx.fillStyle = '#1c1917';
+            ctx.fillRect(22, 172, width - 44, 28);
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = '800 12px Cairo, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText('الصنف والحجم', width - 32, 190);
+            ctx.textAlign = 'left';
+            ctx.fillText('الإجمالي', 32, 190);
+
+            // Items Rows
+            let y = 224;
+            let total = 0;
+            items.forEach((item, idx) => {
+                const lineTotal = item.price * item.qty;
+                total += lineTotal;
+
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#fafaf9';
+                ctx.font = '700 13px Cairo, sans-serif';
+                ctx.fillText(`${idx + 1}. ${item.name} (${item.variantLabel}) × ${item.qty}`, width - 30, y);
+
+                ctx.textAlign = 'left';
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = '800 13px Cairo, sans-serif';
+                ctx.fillText(`${lineTotal} ج.م`, 32, y);
+
+                y += rowHeight;
+            });
+
+            // Total Box
+            ctx.fillStyle = '#1c1917';
+            ctx.fillRect(22, y - 10, width - 44, 42);
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(22, y - 10, width - 44, 42);
+
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#fafaf9';
+            ctx.font = '900 15px Cairo, sans-serif';
+            ctx.fillText('الإجمالي الكلي:', width - 34, y + 16);
+
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = '900 17px Cairo, sans-serif';
+            ctx.fillText(`${total} ج.م`, 34, y + 16);
+
+            // Footer thank you
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#a8a29e';
+            ctx.font = '600 11px Cairo, sans-serif';
+            ctx.fillText('شكراً لاختياركم مطعم ويمبي البساتين • بألف هنا!', width / 2, height - 24);
+        }
+
+        function openReceiptPreviewModal() {
+            renderHighDpiReceiptCanvas();
+            const modal = document.getElementById('receiptModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeReceiptPreviewModal() {
+            const modal = document.getElementById('receiptModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function downloadReceiptImage() {
+            const canvas = document.getElementById('receiptCanvas');
+            const link = document.createElement('a');
+            link.download = `فاتورة-ويمبي-البساتين-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast('تم تحميل صورة الفاتورة الرقمية بنجاح!', 'success');
+        }
+
+        function openQuickContactModal() {
+            const modal = document.getElementById('quickContactModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeQuickContactModal() {
+            const modal = document.getElementById('quickContactModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* ============================================================================
+           9. CUSTOM TOAST NOTIFICATIONS (NO ALERT / CONFIRM)
+           ============================================================================ */
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            const colors = {
+                success: 'bg-stone-900/95 border-amber-500/50 text-amber-300',
+                info: 'bg-stone-900/95 border-stone-700 text-stone-200',
+                error: 'bg-red-950/95 border-red-500/50 text-red-200'
+            };
+
+            const icons = {
+                success: 'fa-circle-check text-amber-400',
+                info: 'fa-bell text-amber-400',
+                error: 'fa-triangle-exclamation text-red-400'
+            };
+
+            toast.className = `${colors[type] || colors.success} border backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 text-xs sm:text-sm font-bold transform transition-all duration-300 translate-y-2 opacity-0`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icons[type] || icons.success} text-base"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('-translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2600);
+        }
+
+        /* ============================================================================
+           10. INITIALIZATION ON WINDOW LOAD
+           ============================================================================ */
+        window.onload = function () {
+            EmberEngine.init();
+            renderCategoryTabs();
+            renderMenuGrid();
+            updateCartUI(false);
+        };
+    </script>
+</body>
+</html>
